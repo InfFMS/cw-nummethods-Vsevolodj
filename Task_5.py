@@ -19,8 +19,7 @@ ax.plot(V, P, label="Graph")# create graph
 ax.set_title("Van-der-Waals equation graph")
 ax.set_ylabel("P, Pa", fontsize=10, color='black', labelpad=0)
 ax.set_xlabel("V, m^3", fontsize=10, color='black', labelpad=0)
-# b1,b2 - borders
-#creste function for solutions
+#creste function for solutions and squares
 def P(V):
     return (R*T)/(V-b)-a/(V**2)-Pnas
 def soluion(f, b1, b2):
@@ -31,12 +30,28 @@ def soluion(f, b1, b2):
             b2=c
         else: b1=c
     return round(c,8)
-def square(f,a,b):
-    return round((f(a)+f(b))*(b-a)/2,6)
+def square(f,b1,b2):
+    step = (b2-b1)/1000
+    a = b1
+    square = 0
+    b = step
+    while b<b1:
+        square += (f(a) + f(b)) * (b - a) / 2
+        a += step
+        b += step
+    return (square - (b1-b2)*f(b1))
 first= 6.140625e-05
 second= 9.984375e-05
-fried= 0.00019484375
-print("First:", square(P,first,second))
-print("Second:",-square(P,second,fried))
+third= 0.00019484375
+print("Solutions")
+print("First:",soluion(P,6*10**(-5),65*10**(-6)))
+x = soluion(P,6*10**(-5),65*10**(-6))
+plt.scatter(x,P(x), color = "red")
+print("Third:",soluion(P,18*10**(-5),20*10**(-5)))
+x = soluion(P,18*10**(-5),20*10**(-5))
+plt.scatter(x,P(x), color = "red")
+print("Square:")
+print("First:", square(P,first,third), Pnas*(third-first))
+
 print("As can be seen with good accuracy, the areas are equal")
 plt.show()
